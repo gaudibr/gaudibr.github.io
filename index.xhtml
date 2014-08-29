@@ -16,7 +16,13 @@
             href="http://uwa.netvibes.com/lib/c/UWA/assets/css/standalone.css" />
         <script type="text/javascript"
             src="http://uwa.netvibes.com/lib/c/UWA/js/UWA_Standalone_Alone.js"></script>
+        
+        <!-- Application Preferences -->
+        <widget:preferences>
+            <widget:preference name="hellowho" type="text" label="Hello who ?" defaultValue="World"></widget:preference>
+        </widget:preferences>
 
+        <!-- Application JavaScript Source -->
         <!-- Application JavaScript Source -->
         <script type="text/javascript">
         //<![CDATA[
@@ -33,8 +39,14 @@
                 */
                 onLoad: function() {
 
-                    // Here we update the content of the widget body.
-                    widget.setBody('Hello Andre!');
+                    var who = widget.getValue('hellowho');
+
+                    // The function "widget.setBody()" replaces the content
+                    // of the widget body.
+                    widget.setBody({
+                        tag: 'p',
+                        text: 'Hello ' + who + '!'
+                    });
                 }
             };
 
