@@ -35,10 +35,23 @@
 
                 toWhom: "no one",
 
+                /*
+                    The onLoad() function is the first one,
+                    it will be triggered by widget "onLoad" event.
+                */
                 onLoad: function() {
 
-                    // the URL should return 'World' in plain text
-                    UWA.Data.getText('http://gaudibr.github.io/request', MyWidget.onComplete);
+                    // The URL should return the hellowho in plain text from "who" parameter,
+                    // following code will perform a GET request like this:
+                    // http://api.example.org/request?who=<widget.getValue('hellowho')>
+                    UWA.Data.request('http://gaudibr.github.io/request', {
+                        onComplete: MyWidget.onComplete,
+                        onFailure: MyWidget.onFailure,
+                        method: 'GET',
+                        data: {
+                            who: widget.getValue('hellowho')
+                        }
+                    });
                 },
 
                 onComplete: function(who) {
@@ -51,12 +64,23 @@
                         tag: 'p',
                         text: 'Hello ' + MyWidget.toWhom + '!'
                     });
+                },
+
+                onFailure: function(error) {
+                    widget.setBody({
+                        tag: 'p',
+                        'class': 'error',
+                        text: 'Unable to get the API response cause: ' + error
+                    });
                 }
             }
 
             /*
-                The "onLoad" event is the very first event triggered when the widget is loaded.
-                Here, we make it trigger the MyWidget.onLoad() function as listener.
+                The "onLoad" event is the very first event triggered when
+                the widget is fully loaded or when the preferences are validated.
+
+                Here, we add MyWidget.onLoad() function as "onLoad" event
+                listener on the widget.
             */
             widget.addEvent('onLoad', MyWidget.onLoad);
 
