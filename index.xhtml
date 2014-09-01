@@ -32,58 +32,33 @@
                 This object will be used to store variables and functions.
             */
             var MyWidget = {
-                
-                whoElement: null,
 
-                /*
-                    The onLoad() function is the first one,
-                    it will be triggered by widget "onLoad" event.
-                */
+                toWhom: "no one",
+
                 onLoad: function() {
 
-                    // Use widget.setBody() to replace the content of the body element
-                    // in order to initialize the layout of your app
+                    // the URL should return 'World' in plain text
+                    UWA.Data.getText('http://api.example.org/request', MyWidget.onComplete);
+                },
+
+                onComplete: function(who) {
+
+                    if (who) {
+                        MyWidget.toWhom = who;
+                    }
+
                     widget.setBody({
-                        tag: 'h1',
-                        text: 'This is a custom widget'
+                        tag: 'p',
+                        text: 'Hello ' + MyWidget.toWhom + '!'
                     });
-
-                    // Inject whoElement into the body
-                    MyWidget.whoElement = widget.createElement('p').inject(widget.body);
-
-                    // Update whoElement
-                    MyWidget.updateWho();
-                },
-
-                /*
-                    The onRefresh() function is the second one,
-                    it will be triggered by the widget "onRefresh" event.
-                */
-                onRefresh: function() {
-
-                    MyWidget.updateWho();
-                },
-
-                updateWho: function () {
-
-                    var who = widget.getValue('hellowho');
-
-                    // widget.setBody() replaces the content of the body element
-                    MyWidget.whoElement.setText('Hello ' + who + '!');
                 }
-            };
+            }
 
-             /*
-                The "onLoad" event is triggered when the widget is loaded and
-                "onRefresh" when the preferences are validated.
-
-                Here, we add the MyWidget.onLoad() and MyWidget.onRefresh() functions
-                as "onLoad" and "onRefresh" event listeners on the widget.
+            /*
+                The "onLoad" event is the very first event triggered when the widget is loaded.
+                Here, we make it trigger the MyWidget.onLoad() function as listener.
             */
-            widget.addEvents({
-                onLoad: MyWidget.onLoad,
-                onRefresh: MyWidget.onRefresh,
-            });
+            widget.addEvent('onLoad', MyWidget.onLoad);
 
         //]]>
         </script>
